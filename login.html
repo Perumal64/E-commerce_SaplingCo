@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sign in · Sapling &amp; Co.</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces:wght@600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="auth">
+    <h1>🌿 Sapling &amp; Co.</h1>
+    <p id="sub">Welcome back to the nursery.</p>
+    <div class="tabs"><button class="chip on" data-m="in">Sign in</button><button class="chip" data-m="up">Sign
+        up</button><button class="chip" data-m="rs">Reset</button></div>
+    <form id="f" novalidate>
+      <div class="up"><label>Full name<input id="name"></label><label>Mobile (10 digits)<input id="mob"
+            inputmode="numeric" maxlength="10"></label></div>
+      <label>Email<input id="email" type="email"></label>
+      <div class="pw"><label>Password<input id="pw" type="password" placeholder="8+ chars, letter &amp; number"></label>
+      </div>
+      <div class="up"><label>Confirm password<input id="pw2" type="password"></label></div>
+      <p class="err" id="err"></p><button class="btn" style="width:100%" id="go">Sign in</button>
+    </form>
+    <p style="margin-top:12px"><a href="index.html">← Browse the shop</a></p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let m = "in"; const next = new URLSearchParams(location.search).get("next");
+    function mode(x) { m = x; $(".tabs .chip").removeClass("on").filter(`[data-m=${x}]`).addClass("on"); $(".up").toggle(x == "up"); $(".pw").toggle(x != "rs"); $("#go").text({ in: "Sign in", up: "Create account", rs: "Send reset email" }[x]); $("#err").text("") }
+    $(".tabs").on("click", "button", e => mode(e.target.dataset.m)); mode("in");
+    $("#f").on("submit", async e => {
+      e.preventDefault(); const em = $("#email").val().trim(), pw = $("#pw").val(), er = t => { $("#err").text(t); return 0 };
+      if (!V.email(em)) return er("Enter a valid email address.");
+      try {
+        $("#go").prop("disabled", 1);
+        if (m == "rs") { await Auth.reset(em); $("#err").css("color", "#1f4d34").text("Reset link sent — check your inbox."); return }
+        if (m == "up") {
+          const n = $("#name").val().trim(), mb = $("#mob").val().trim();
+          if (n.length < 2) return er("Enter your name."); if (!V.mob(mb)) return er("Mobile must be 10 digits starting 6-9.");
+          if (!V.pw(pw)) return er("Password needs 8+ characters with a letter and a number."); if (pw != $("#pw2").val()) return er("Passwords do not match.");
+          const r = await Auth.up(em, pw);
+          if (em.toLowerCase() != APP.adminEmail.toLowerCase()) {
+            S.set({ uid: r.localId, idToken: r.idToken, refreshToken: r.refreshToken, exp: Date.now() + r.expiresIn * 1000, role: "customer", name: n, email: em });
+            await DB.add("customers", { name: n, email: em, mob: mb, creditLimit: APP.defaultCredit, creditUsed: 0, createdAt: new Date().toISOString() }, r.localId);
+            mail(em, "Welcome to Sapling & Co.", `<p>Hi ${esc(n)}, your account is ready. Happy planting!</p>`)
+          }
+        }
+        const s = await Auth.login(em, pw); location.href = next || (s.role == "admin" ? "admin.html" : "index.html")
+      } catch (x) { er(x.message.replace(/_/g, " ").toLowerCase()) } finally { $("#go").prop("disabled", 0) }
+    });
+  </script>
+</body>
+
+</html>

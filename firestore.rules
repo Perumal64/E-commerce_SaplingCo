@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore { match /databases/{db}/documents {
+  function admin() { return request.auth != null && request.auth.token.email == 'admin@saplingco.com'; }
+  function signed() { return request.auth != null; }
+  match /categories/{id} { allow read: if true; allow write: if admin(); }
+  match /inventory/{id} { allow read: if true; allow write: if admin();
+    // customers may only REDUCE stock (checkout)
+    allow update: if signed() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['qty'])
+      && request.resource.data.qty >= 0 && request.resource.data.qty < resource.data.qty; }
+  match /customers/{id} { allow read: if admin() || request.auth.uid == id; allow write: if admin();
+    allow create: if request.auth.uid == id && request.resource.data.creditLimit == 0 && request.resource.data.creditUsed == 0;
+    allow update: if request.auth.uid == id && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['creditUsed'])
+      && request.resource.data.creditUsed <= resource.data.creditLimit; }
+  match /orders/{id} { allow read: if admin() || resource.data.custId == request.auth.uid;
+    allow create: if signed() && request.resource.data.custId == request.auth.uid; }
+}}

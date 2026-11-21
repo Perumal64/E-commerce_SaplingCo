@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sapling &amp; Co. · Plants, pots &amp; garden care</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="ann">🚚 Free delivery on orders above ₹499 · 🌿 Plants packed with care</div>
+    <header class="top"><a class="logo" href="index.html">🌿 Sapling &amp; Co.</a>
+        <form class="sbox" id="sf" autocomplete="off"><select id="sc">
+                <option value="">All</option>
+            </select><input id="q" placeholder="Search for plants, pots, seeds, tools…"><button class="btn">🔍</button>
+            <div id="sug" class="sug"></div>
+        </form>
+        <span id="acct" class="acct"></span><button class="btn cartb" id="cartBtn">🛒 Cart <b id="cc">0</b></button>
+    </header>
+    <nav class="cnav" id="cnav"></nav>
+    <p class="demo" id="demo" hidden>Showing the demo catalogue — connect Firebase in <code>js/config.js</code> to use
+        your live inventory and place orders.</p>
+    <section class="slider" id="slider"></section>
+    <section class="tiles" id="tiles"></section>
+    <div class="shop" id="shop">
+        <aside class="filt">
+            <h3>Categories</h3>
+            <div id="fcat"></div>
+            <h3>Max price: <span id="mxv"></span></h3><input type="range" id="mx" min="0" step="10"><label
+                class="chk"><input type="checkbox" id="st"> In stock only</label><button class="btn ghost sm"
+                id="clr">Clear filters</button>
+        </aside>
+        <div class="res">
+            <div class="rh"><b id="cnt"></b><select id="so">
+                    <option value="rel">Sort: Featured</option>
+                    <option value="pa">Price: Low to High</option>
+                    <option value="pd">Price: High to Low</option>
+                    <option value="az">Name: A–Z</option>
+                </select></div>
+            <div class="grid" id="grid"></div>
+            <div class="pg" id="pg"></div>
+        </div>
+    </div>
+    <section class="perks">
+        <div>🚚<b>Fast delivery</b><small>Across Tamil Nadu</small></div>
+        <div>🌿<b>Healthy plants</b><small>Quality checked</small></div>
+        <div>💳<b>Cash or store credit</b><small>Pay your way</small></div>
+        <div>🔒<b>Secure sign-in</b><small>Firebase Auth</small></div>
+    </section>
+    <footer class="foot"><b class="logo">🌿 Sapling &amp; Co.</b><span>Plants · Pots · Seeds · Tools ·
+            Care</span><span>© 2026 Sapling &amp; Co.</span></footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/sample.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/store.js"></script>
+</body>
+
+</html>

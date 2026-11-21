@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Admin · Sapling &amp; Co.</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Fraunces:wght@600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="adm">
+        <aside class="side">
+            <div class="logo">🌿 Admin</div><button data-t="dash" class="on">Dashboard</button><button
+                data-t="inv">Inventory</button><button data-t="cat">Categories</button><button
+                data-t="cus">Customers</button><button data-t="rep">Reports</button><button
+                onclick="location.href='index.html'">View shop ↗</button><button id="out">Sign out</button>
+        </aside>
+        <main class="main" id="main"></main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
